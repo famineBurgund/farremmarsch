@@ -10,10 +10,9 @@ import (
 func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+	r.Get("/hello", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Hello, World!"))
 	})
-	if err := http.ListenAndServe(":8080", r); err != nil {
-		panic(err)
-	}
+
+	http.ListenAndServe(":8080", r)
 }
