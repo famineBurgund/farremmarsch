@@ -45,6 +45,7 @@ type MinIO struct {
 }
 
 type Keycloak struct {
+	Enabled       bool   `yaml: "enabled"`
 	AuthServerURL string `yaml: "auth_server_url"`
 	Realm         string `yaml: "realm"`
 	ClientID      string `yaml: "client_id"`
