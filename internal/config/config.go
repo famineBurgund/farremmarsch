@@ -53,8 +53,11 @@ type Keycloak struct {
 }
 
 type Log struct {
-	Level    string `yaml:"level"`
-	FilePath string `yaml:"file_path"`
+	Level      string `yaml:"level"`
+	FilePath   string `yaml:"file_path"`
+	MaxSize    int    `yaml:"max_size"`
+	MaxBackups int    `yaml:"max_backups"`
+	MaxAgeDays int    `yaml:"max_age_days"`
 }
 
 func LoadConfig(path string) (*Config, error) {

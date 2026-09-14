@@ -4,10 +4,11 @@ import (
 	"context"
 	"database/sql"
 	"famiBurgund/internal/config"
+	"famiBurgund/pkg/logger"
 	"flag"
 	"log"
-	"os"
 
+	"go.uber.org/zap"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -21,14 +22,17 @@ func main() {
 		log.Fatalf("Failed to load config: %v", err)
 	}
 
-	log := log.New(os.Stdout, "", log.LstdFlags)
-	log.Info("Starting server with the following configuration:")
-	log.Infof("Postgres: %+v", cfg.Postgres)
-	log.Infof("Keycloak: %+v", cfg.Keycloak)
-	log.Infof("Log: %+v", cfg.Log)
-
-	// Start the server with the loaded configuration
-	// ...
+	appLogger, err := logger.New(logger.Config{
+		Level:      cfg.Log.Level,
+		FilePath:   cfg.Log.FilePath,
+		MaxSizeMB:  cfg.Log.MaxSize,
+		MaxBackups: cfg.Log.MaxBackups,
+		MaxAgeDays: cfg.Log.MaxAgeDays,
+	})
+	if err != nil {
+		log.Fatalf("Failed to initialize logger: %v", err)
+	}
+	appLogger.Info("Starting server with the following configuration:", zap.String("app_name", cfg.App.Name), zap.String("env", cfg.App.Env))
 
 	var (
 		db    *gorm.DB
@@ -47,5 +51,5 @@ func main() {
 	if err != sqlDB.PingContext(context.Background()) {
 		log.Fatalf("Failed to ping the database: %v", err)
 	}
-	log.Info("Successfully connected to the database")
+	appLogger.Info("Successfully connected to the database")
 }

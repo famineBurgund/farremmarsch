@@ -30,3 +30,6 @@ minio:
 log:
   level: debug
   filePath: /var/log/farrepmachine.log
+  max_size_mb: 100
+  max_backups: 5
+  max_age_days: 30

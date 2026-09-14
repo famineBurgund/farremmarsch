@@ -12,9 +12,12 @@ import (
 type ContextKey struct{}
 
 type Config struct {
-	Level    string
-	Env      string
-	FilePath string
+	Level      string
+	Env        string
+	FilePath   string
+	MaxSizeMB  int
+	MaxBackups int
+	MaxAgeDays int
 }
 
 func New(cfg Config) (*zap.Logger, error) {
@@ -31,10 +34,9 @@ func New(cfg Config) (*zap.Logger, error) {
 	if cfg.FilePath != "" {
 		fileWriter := &lumberjack.Logger{
 			Filename:   cfg.FilePath,
-			MaxSize:    10, // megabytes
-			MaxBackups: 3,
-			MaxAge:     28, // days
-			Compress:   true,
+			MaxSize:    maxOrDefault(cfg.MaxSizeMB, 10), // megabytes
+			MaxBackups: maxOrDefault(cfg.MaxBackups, 3),
+			MaxAge:     maxOrDefault(cfg.MaxAgeDays, 28), // days
 		}
 		cores = append(cores, zapcore.NewCore(encoder, zapcore.AddSync(fileWriter), level))
 	}
