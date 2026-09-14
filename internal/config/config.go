@@ -9,55 +9,55 @@ import (
 )
 
 type Config struct {
-	App      App      `yaml: "app"`
-	HTTP     HTTP     `yaml: "http"`
-	Postgres Postgres `yaml: "postgres"`
-	MinIO    MinIO    `yaml: "minio"`
-	Keycloak Keycloak `yaml: "keycloak"`
-	Log      Log      `yaml: "log"`
+	App      App      `yaml:"app"`
+	HTTP     HTTP     `yaml:"http"`
+	Postgres Postgres `yaml:"postgres"`
+	MinIO    MinIO    `yaml:"minio"`
+	Keycloak Keycloak `yaml:"keycloak"`
+	Log      Log      `yaml:"log"`
 }
 
 type App struct {
-	Name string `yaml: "name"`
-	Env  string `yaml: "env"`
+	Name string `yaml:"name"`
+	Env  string `yaml:"env"`
 }
 
 type HTTP struct {
-	Port         string `yaml: "port"`
-	ReadTimeout  int    `yaml: "read_timeout"`
-	WriteTimeout int    `yaml: "write_timeout"`
+	Port         string `yaml:"port"`
+	ReadTimeout  int    `yaml:"read_timeout"`
+	WriteTimeout int    `yaml:"write_timeout"`
 }
 
 type Postgres struct {
-	Host     string `yaml: "host"`
-	Port     string `yaml: "port"`
-	User     string `yaml: "user"`
-	Password string `yaml: "password"`
-	DBName   string `yaml: "dbname"`
-	SSLMode  string `yaml: "sslmode"`
+	Host     string `yaml:"host"`
+	Port     string `yaml:"port"`
+	User     string `yaml:"user"`
+	Password string `yaml:"password"`
+	DBName   string `yaml:"dbname"`
+	SSLMode  string `yaml:"sslmode"`
 }
 
 type MinIO struct {
-	Endpoint        string `yaml: "endpoint"`
-	AccessKeyID     string `yaml: "access_key_id"`
-	SecretAccessKey string `yaml: "secret_access_key"`
-	BucketName      string `yaml: "bucket_name"`
+	Endpoint        string `yaml:"endpoint"`
+	AccessKeyID     string `yaml:"access_key_id"`
+	SecretAccessKey string `yaml:"secret_access_key"`
+	BucketName      string `yaml:"bucket_name"`
 }
 
 type Keycloak struct {
-	Enabled       bool   `yaml: "enabled"`
-	AuthServerURL string `yaml: "auth_server_url"`
-	Realm         string `yaml: "realm"`
-	ClientID      string `yaml: "client_id"`
-	ClientSecret  string `yaml: "client_secret"`
+	Enabled       bool   `yaml:"enabled"`
+	AuthServerURL string `yaml:"auth_server_url"`
+	Realm         string `yaml:"realm"`
+	ClientID      string `yaml:"client_id"`
+	ClientSecret  string `yaml:"client_secret"`
 }
 
 type Log struct {
-	Level    string `yaml: "level"`
-	FilePath string `yaml: "file_path"`
+	Level    string `yaml:"level"`
+	FilePath string `yaml:"file_path"`
 }
 
-func Load(path string) (*Config, error) {
+func LoadConfig(path string) (*Config, error) {
 	cfg, err := loadConfigFromFile(path)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
@@ -87,7 +87,7 @@ func (p *Postgres) GetDSN() string {
 }
 
 func PostgresDSN(path string) (string, error) {
-	cfg, err := Load(path)
+	cfg, err := LoadConfig(path)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
